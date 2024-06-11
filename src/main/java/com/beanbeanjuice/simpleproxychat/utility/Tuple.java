@@ -1,8 +1,15 @@
 package com.beanbeanjuice.simpleproxychat.utility;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
+
+import java.util.Objects;
 
 @Getter
+@ToString
+@EqualsAndHashCode
+
 public class Tuple<KeyType, ValueType> {
 
     private final KeyType key;
