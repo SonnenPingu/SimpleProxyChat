@@ -133,72 +133,84 @@ public class SimpleProxyChatVelocity {
         });
     }
 
-    private void startUpdateChecker() {
-        String currentVersion = this.proxyServer.getPluginManager().getPlugin("simpleproxychat")
-                .flatMap(pluginContainer -> pluginContainer.getDescription().getVersion())
-                .get();
+ private void startUpdateChecker() {
+    String currentVersion = this.getDescription().getVersion();
 
-        UpdateChecker updateChecker = new UpdateChecker(
-                config,
-                currentVersion,
-                (message) -> {
-                    if (!config.getAsBoolean(ConfigDataKey.UPDATE_NOTIFICATIONS)) return;
-                    this.getLogger().info(Helper.sanitize(message));
-                    this.proxyServer.getAllPlayers()
-                            .stream()
-                            .filter((player) -> player.hasPermission(Permission.READ_UPDATE_NOTIFICATION.getPermissionNode()))
-                            .forEach((player) -> player.sendMessage(Helper.stringToComponent(config.getAsString(ConfigDataKey.PLUGIN_PREFIX) + message)));
-                }
-        );
+    UpdateChecker updateChecker = new UpdateChecker(
+        config,
+        currentVersion,
+        (message) -> {
+            if (!config.getAsBoolean(ConfigDataKey.UPDATE_NOTIFICATIONS)) {
+                return; // Benachrichtigungen sind deaktiviert, also nichts tun
+            }
 
-        this.proxyServer.getScheduler().buildTask(this, updateChecker::checkUpdate)
-                .delay(0, TimeUnit.MINUTES)
-                .repeat(12, TimeUnit.HOURS)
-                .schedule();
-    }
+            this.getLogger().info(Helper.sanitize(message)); // Loggen der bereinigten Nachricht
 
+            // Formatieren der Update-Nachricht
+            Component minimessage = MiniMessage.miniMessage().deserialize(
+                config.getAsString(ConfigDataKey.PLUGIN_PREFIX) + message
+            );
+
+            // Senden der Nachricht nur an Spieler mit der entsprechenden Berechtigung
+            this.getProxy().getPlayers().stream()
+                .filter(player -> player.hasPermission(Permission.READ_UPDATE_NOTIFICATION.getPermissionNode()))
+                .forEach(player -> player.sendMessage(ChatMessageType.CHAT, BungeeComponentSerializer.get().serialize(minimessage)));
+        }
+    );
+
+    // Planen der Update-Prüfung mit Fehlerbehandlung
+    this.getProxy().getScheduler().schedule(this, () -> {
+        try {
+            updateChecker.checkUpdate(); // Update-Prüfung durchführen
+        } catch (Exception e) {
+            getLogger().warning("Fehler bei der Update-Prüfung: " + e.getMessage());
+        }
+    }, 0, 12, TimeUnit.HOURS); // Alle 12 Stunden wiederholen
+}
+
+
+    
     private void hookPlugins() {
-        PluginManager pm = this.proxyServer.getPluginManager();
+        PluginManager pm = this.getProxy().getPluginManager();
 
-        // Enable vanish support.
-        if (pm.getPlugin("premiumvanish").isPresent() || pm.getPlugin("supervanish").isPresent()) {
+        if (pm.getPlugin("PremiumVanish") != null || pm.getPlugin("SuperVanish") != null) {
             this.config.overwrite(ConfigDataKey.VANISH_ENABLED, true);
-            this.getLogger().info("Die Unterstützung von PremiumVanish/SuperVanish wurde aktiviert..");
+            this.getLogger().log(Level.INFO, "PremiumVanish/SuperVanish-Unterstützung wurde aktiviert.");
+            this.getProxy().getPluginManager().registerListener(this, new BungeeVanishListener(serverListener, config));
         }
 
-        // Registering LuckPerms support.
-        if (pm.getPlugin("luckperms").isPresent()) {
+        if (pm.getPlugin("LuckPerms") != null) {
             config.overwrite(ConfigDataKey.LUCKPERMS_ENABLED, true);
-            this.getLogger().info("Die Unterstützung von LuckPerms wurde aktiviert.");
+            getLogger().info("LuckPerms-Unterstützung wurde aktiviert.");
         }
 
-        // Registering LiteBans support.
-        if (pm.getPlugin("litebans").isPresent()) {
+        if (pm.getPlugin("LiteBans") != null) {
             config.overwrite(ConfigDataKey.LITEBANS_ENABLED, true);
-            this.getLogger().info("LiteBans-Unterstützung wurde aktiviert.");
+            getLogger().info("LiteBans-Unterstützung wurde aktiviert.");
         }
 
-        // Registering AdvancedBan support.
-        if (pm.getPlugin("advancedban").isPresent()) {
+        if (pm.getPlugin("AdvancedBan") != null) {
             config.overwrite(ConfigDataKey.ADVANCEDBAN_ENABLED, true);
-            this.getLogger().info("AdvancedBan-Unterstützung wurde aktiviert.");
+            getLogger().info("AdvancedBan-Unterstützung wurde aktiviert.");
         }
 
-        // Registering NetworkManager support.
-        if (pm.getPlugin("networkmanager").isPresent()) {
+        if (pm.getPlugin("NetworkManager") != null) {
             config.overwrite(ConfigDataKey.NETWORKMANAGER_ENABLED, true);
-            this.getLogger().info("NetworkManager-Unterstützung wurde aktiviert.");
+            getLogger().info("NetworkManager-Unterstützung wurde aktiviert.");
         }
 
-        // Registering the Simple Banning System
-        if (!config.getAsBoolean(ConfigDataKey.LITEBANS_ENABLED) && !config.getAsBoolean(ConfigDataKey.ADVANCEDBAN_ENABLED) && config.getAsBoolean(ConfigDataKey.USE_SIMPLE_PROXY_CHAT_BANNING_SYSTEM)) {
-            getLogger().info("LiteBans und AdvancedBan nicht gefunden. Verwendung des eingebauten Verbotssystems für SimpleProxyChat...");
-            banHelper = new BanHelper(dataDirectory);
+        if (!config.getAsBoolean(ConfigDataKey.LITEBANS_ENABLED) 
+            && !config.getAsBoolean(ConfigDataKey.ADVANCEDBAN_ENABLED) 
+            && config.getAsBoolean(ConfigDataKey.USE_SIMPLE_PROXY_CHAT_BANNING_SYSTEM)) {
+
+            getLogger().info("LiteBans und AdvancedBan nicht gefunden. Verwende das eingebaute Bannsystem für SimpleProxyChat...");
+            banHelper = new BanHelper(this.getDataFolder());
             banHelper.initialize();
         } else {
             config.overwrite(ConfigDataKey.USE_SIMPLE_PROXY_CHAT_BANNING_SYSTEM, false);
         }
     }
+
 
     private void registerListeners() {
         // Register chat listener.
