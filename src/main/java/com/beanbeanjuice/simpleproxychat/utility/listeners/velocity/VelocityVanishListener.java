@@ -2,47 +2,51 @@ package com.beanbeanjuice.simpleproxychat.utility.listeners.velocity;
 
 import com.beanbeanjuice.simpleproxychat.SimpleProxyChatVelocity;
 import com.beanbeanjuice.simpleproxychat.utility.config.ConfigDataKey;
+import com.velocitypowered.api.event.Subscribe;
+import com.velocitypowered.api.event.player.ServerConnectedEvent;
+import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.proxy.Player;
 import de.myzelyam.api.vanish.VelocityVanishAPI;
 
-import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
+import java.util.HashSet;
+import java.util.Set;
 
 public class VelocityVanishListener {
 
     private final SimpleProxyChatVelocity plugin;
     private final VelocityServerListener listener;
-    private final HashMap<Player, Boolean> vanishedPlayers = new HashMap<>();
+    private final Set<Player> vanishedPlayers = new HashSet<>();
 
     public VelocityVanishListener(SimpleProxyChatVelocity plugin, VelocityServerListener listener) {
         this.plugin = plugin;
         this.listener = listener;
     }
 
-    // TODO: There will be a better way to do this once the API is updated.
-    private boolean hasStateChange(Player player) {
-        boolean currentState = VelocityVanishAPI.isInvisible(player);
-
-        Boolean oldState = vanishedPlayers.put(player, currentState);
-        return oldState != null && oldState != currentState;
+    @Subscribe
+    public void onProxyInitialize(ProxyInitializeEvent event) {
+        startVanishListener();
     }
 
-    private void checkStateChange() {
+    @Subscribe
+    public void onServerConnected(ServerConnectedEvent event) {
+        checkVanishStatus(event.getPlayer());
+    }
+
+    private void checkVanishStatus(Player player) {
         if (!plugin.getConfig().getAsBoolean(ConfigDataKey.VANISH_ENABLED)) return;
+        
+        boolean isInvisible = VelocityVanishAPI.isInvisible(player);
 
-        plugin.getProxyServer().getAllPlayers().forEach(player -> {
-            if (hasStateChange(player)) {
-                if (vanishedPlayers.get(player)) listener.leave(player);
-                else player.getCurrentServer().ifPresent(server -> this.listener.join(player, server.getServerInfo().getName()));
-            }
-        });
+        if (isInvisible && !vanishedPlayers.contains(player)) {
+            vanishedPlayers.add(player);
+            listener.leave(player); // Spieler wird unsichtbar -> Simuliere Verlassen
+        } else if (!isInvisible && vanishedPlayers.contains(player)) {
+            vanishedPlayers.remove(player);
+            listener.join(player, player.getCurrentServer().map(s -> s.getServerInfo().getName()).orElse("unknown")); // Spieler wird sichtbar -> Simuliere Beitritt
+        }
     }
-
+    
     public void startVanishListener() {
-        this.plugin.getProxyServer().getScheduler()
-                .buildTask(plugin, this::checkStateChange)
-                .repeat(500, TimeUnit.MILLISECONDS)
-                .schedule();
+        plugin.getProxyServer().getAllPlayers().forEach(this::checkVanishStatus); // Initialer Check beim Start
     }
-
 }
