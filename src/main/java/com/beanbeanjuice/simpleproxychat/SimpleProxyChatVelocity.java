@@ -71,19 +71,19 @@ public class SimpleProxyChatVelocity {
         epochHelper = new EpochHelper(config);
 
         // Plugin enabled.
-        this.getLogger().info("Plugin has been initialized.");
+        this.getLogger().info("Plugin wurde erfolgreich geladen.");
     }
 
     @Subscribe(order = PostOrder.LAST)
     public void onProxyInitialization(ProxyInitializeEvent event) {
         // Initialize discord bot.
-        this.getLogger().info("Attempting to initialize Discord bot... (if enabled)");
+        this.getLogger().info("Versuch, Discord-Bot zu initialisieren... (falls aktiviert)");
         discordBot = new Bot(this.config);
 
         // Bot ready.
         this.proxyServer.getScheduler().buildTask(this, () -> {
             try { discordBot.start();
-            } catch (Exception e) { this.getLogger().warn("There was an error starting the discord bot: {}", e.getMessage()); }
+            } catch (Exception e) { this.getLogger().warn("Es gab einen Fehler beim Starten des Discord-Bots: {}", e.getMessage()); }
         }).schedule();
 
         hookPlugins();
@@ -163,36 +163,36 @@ public class SimpleProxyChatVelocity {
         // Enable vanish support.
         if (pm.getPlugin("premiumvanish").isPresent() || pm.getPlugin("supervanish").isPresent()) {
             this.config.overwrite(ConfigDataKey.VANISH_ENABLED, true);
-            this.getLogger().info("PremiumVanish/SuperVanish support has been enabled.");
+            this.getLogger().info("Die Unterstützung von PremiumVanish/SuperVanish wurde aktiviert..");
         }
 
         // Registering LuckPerms support.
         if (pm.getPlugin("luckperms").isPresent()) {
             config.overwrite(ConfigDataKey.LUCKPERMS_ENABLED, true);
-            this.getLogger().info("LuckPerms support has been enabled.");
+            this.getLogger().info("Die Unterstützung von LuckPerms wurde aktiviert.");
         }
 
         // Registering LiteBans support.
         if (pm.getPlugin("litebans").isPresent()) {
             config.overwrite(ConfigDataKey.LITEBANS_ENABLED, true);
-            this.getLogger().info("LiteBans support has been enabled.");
+            this.getLogger().info("LiteBans-Unterstützung wurde aktiviert.");
         }
 
         // Registering AdvancedBan support.
         if (pm.getPlugin("advancedban").isPresent()) {
             config.overwrite(ConfigDataKey.ADVANCEDBAN_ENABLED, true);
-            this.getLogger().info("AdvancedBan support has been enabled.");
+            this.getLogger().info("AdvancedBan-Unterstützung wurde aktiviert.");
         }
 
         // Registering NetworkManager support.
         if (pm.getPlugin("networkmanager").isPresent()) {
             config.overwrite(ConfigDataKey.NETWORKMANAGER_ENABLED, true);
-            this.getLogger().info("NetworkManager support has been enabled.");
+            this.getLogger().info("NetworkManager-Unterstützung wurde aktiviert.");
         }
 
         // Registering the Simple Banning System
         if (!config.getAsBoolean(ConfigDataKey.LITEBANS_ENABLED) && !config.getAsBoolean(ConfigDataKey.ADVANCEDBAN_ENABLED) && config.getAsBoolean(ConfigDataKey.USE_SIMPLE_PROXY_CHAT_BANNING_SYSTEM)) {
-            getLogger().info("LiteBans and AdvancedBan not found. Using the built-in banning system for SimpleProxyChat...");
+            getLogger().info("LiteBans und AdvancedBan nicht gefunden. Verwendung des eingebauten Verbotssystems für SimpleProxyChat...");
             banHelper = new BanHelper(dataDirectory);
             banHelper.initialize();
         } else {
@@ -270,7 +270,7 @@ public class SimpleProxyChatVelocity {
 
     @Subscribe(order = PostOrder.LAST)
     public void onProxyShutdown(ProxyShutdownEvent event) {
-        this.getLogger().info("The plugin is shutting down...");
+        this.getLogger().info("Das Plugin schaltet sich ab...");
         discordBot.stop();
     }
 
