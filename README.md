@@ -1,3 +1,11 @@
+This fork has been customised with changes that have NOT been verified!
+PLEASE do not use it in a public environment!
+
+It is a test and for me a private exercise to work with java!
+
+Thanks to the actual developer that you have done so much preparatory work and I do not have to rewrite everything but can work with the existing code.
+
+
 <p align="center">
   <img src="https://github.com/beanbeanjuice/SimpleProxyChat/blob/master/Images/Finished/SimpleProxyChat.png?raw=true" alt="SimpleProxyChat Logo"/>
 </p>
