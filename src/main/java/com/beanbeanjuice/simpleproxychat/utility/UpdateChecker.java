@@ -24,28 +24,36 @@ public class UpdateChecker {
         this.currentVersion = currentVersion;
         this.notifyFunction = notifyFunction;
     }
+private static final String SPIGOT_UPDATE_URL = "https://api.spigotmc.org/legacy/update.php?resource=115305";
 
     public Optional<String> getUpdate() {
-        try (InputStream is = new URI("https://api.spigotmc.org/legacy/update.php?resource=" + 115305 + "/").toURL().openStream(); Scanner scann = new Scanner(is)) {
-            if (scann.hasNext()) return Optional.of(scann.next());
-        } catch (IOException | URISyntaxException ignored) { }
-        return Optional.empty();
+        try (InputStream is = URI.create(SPIGOT_UPDATE_URL).toURL().openStream(); 
+             Scanner scanner = new Scanner(is)) {
+            
+            return scanner.hasNext() ? Optional.of(scanner.next()) : Optional.empty();
+
+        } catch (IOException | URISyntaxException e) {
+            config.getLogger().log(Level.WARNING, "Fehler bei der Update-Prüfung:", e); // Fehler protokollieren
+            return Optional.empty();
+        }
     }
 
     public void checkUpdate() {
-        getUpdate().ifPresent((spigotVersion) -> {
-            if (compare(currentVersion, spigotVersion) >= 0) return;
-
-            String message = Helper.replaceKeys(
-                    config.getAsString(ConfigDataKey.UPDATE_MESSAGE),
-                    Tuple.of("plugin-prefix", config.getAsString(ConfigDataKey.PLUGIN_PREFIX)),
-                    Tuple.of("old", currentVersion),
-                    Tuple.of("new", spigotVersion),
-                    Tuple.of("link", "https://www.spigotmc.org/resources/115305/")
-            );
-
-            notifyFunction.accept(message);
-        });
+        getUpdate().ifPresentOrElse(
+            spigotVersion -> {
+                if (compare(currentVersion, spigotVersion) < 0) { // Versionen vergleichen
+                    String message = Helper.replaceKeys(
+                        config.getAsString(ConfigDataKey.UPDATE_MESSAGE),
+                        Tuple.of("plugin-prefix", config.getAsString(ConfigDataKey.PLUGIN_PREFIX)),
+                        Tuple.of("old", currentVersion),
+                        Tuple.of("new", spigotVersion),
+                        Tuple.of("link", "https://www.spigotmc.org/resources/115305/")
+                    );
+                    notifyFunction.accept(message);
+                }
+            },
+            () -> config.getLogger().log(Level.WARNING, "Update-Prüfung fehlgeschlagen.") 
+        );
     }
 
     public static int compare(final String version1, final String version2) {
@@ -54,5 +62,4 @@ public class UpdateChecker {
 
         return v1.compareTo(v2);
     }
-
 }
