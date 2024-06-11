@@ -12,25 +12,25 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.function.Consumer;
 
+
 public class ServerStatusManager {
 
-    private final Hashtable<String, ServerStatus> servers;  // Hashtable for Thread Safety
+    private final Map<String, ServerStatus> servers;
     private final Config config;
 
     public ServerStatusManager(Config config) {
-        servers = new Hashtable<>();
+        servers = new HashMap<>(); 
         this.config = config;
     }
 
     public ServerStatus getStatus(String serverName) {
-        servers.putIfAbsent(serverName, new ServerStatus());
+        servers.putIfAbsent(serverName, new ServerStatus()); // Wenn nicht vorhanden, neuen Status erstellen
         return servers.get(serverName);
     }
 
     public void setStatus(String serverName, boolean status) {
         servers.put(serverName, new ServerStatus(status));
     }
-
     public MessageEmbed getStatusEmbed(String serverName, boolean status) {
         String statusMessageString = config.getAsString(ConfigDataKey.DISCORD_PROXY_STATUS_MODULE_MESSAGE);
         String statusString = status ? config.getAsString(ConfigDataKey.DISCORD_PROXY_STATUS_MODULE_ONLINE) : config.getAsString(ConfigDataKey.DISCORD_PROXY_STATUS_MODULE_OFFLINE);
@@ -45,9 +45,9 @@ public class ServerStatusManager {
         return embedBuilder.build();
     }
 
+
     public MessageEmbed getAllStatusEmbed() {
         String title = config.getAsString(ConfigDataKey.DISCORD_PROXY_STATUS_MODULE_TITLE);
-        String message = config.getAsString(ConfigDataKey.DISCORD_PROXY_STATUS_MODULE_MESSAGE);
         String onlineString = config.getAsString(ConfigDataKey.DISCORD_PROXY_STATUS_MODULE_ONLINE);
         String offlineString = config.getAsString(ConfigDataKey.DISCORD_PROXY_STATUS_MODULE_OFFLINE);
 
@@ -55,8 +55,11 @@ public class ServerStatusManager {
         embedBuilder.setTitle(title);
 
         servers.forEach((serverName, serverStatus) -> {
-            String statusString = (serverStatus.getStatus()) ? onlineString : offlineString;
-            embedBuilder.addField(Helper.convertAlias(config, serverName), message + statusString, true);
+            // Verwenden von String.format für bessere Lesbarkeit und weniger Redundanz
+            String statusString = String.format("%s %s", 
+                                                config.getAsString(ConfigDataKey.DISCORD_PROXY_STATUS_MODULE_MESSAGE),
+                                                serverStatus.getStatus() ? onlineString : offlineString);
+            embedBuilder.addField(Helper.convertAlias(config, serverName), statusString, true);
         });
 
         embedBuilder.setColor(Color.YELLOW);
@@ -67,27 +70,48 @@ public class ServerStatusManager {
         String statusString = status ? "online" : "offline";
         return String.format("%s is %s.", Helper.convertAlias(config, serverName), statusString);
     }
-
-    public ArrayList<String> getAllStatusStrings() {
-        ArrayList<String> statusStrings = new ArrayList<>();
-        if (config.getAsBoolean(ConfigDataKey.CONSOLE_SERVER_STATUS))
-            servers.forEach((serverName, serverStatus) -> statusStrings.add(getStatusString(serverName, serverStatus.getStatus())));
+  public List<String> getAllStatusStrings() { // Verwendung von List für mehr Flexibilität
+        List<String> statusStrings = new ArrayList<>();
+        if (config.getAsBoolean(ConfigDataKey.CONSOLE_SERVER_STATUS)) {
+            servers.forEach((serverName, serverStatus) -> 
+                statusStrings.add(getStatusString(serverName, serverStatus.getStatus()))
+            );
+        }
         return statusStrings;
     }
 
+    
     public void runStatusLogic(String serverName, boolean newStatus, Bot discordBot, Consumer<String> logger) {
         if (config.getAsBoolean(ConfigDataKey.PLUGIN_STARTING)) {
-            this.setStatus(serverName, newStatus);
-            return;
+            this.setStatus(serverName, newStatus); // Set initial status on startup
+            return; // Exit the method early on startup
         }
 
         ServerStatus currentStatus = this.getStatus(serverName);
-        currentStatus.updateStatus(newStatus).ifPresent((isOnline) -> {
-            if (config.getAsBoolean(ConfigDataKey.DISCORD_PROXY_STATUS_ENABLED))
-                discordBot.sendMessageEmbed(this.getStatusEmbed(serverName, isOnline));
+        currentStatus.updateStatus(newStatus).ifPresent(isOnline -> {
+            // Diese if-Bedingung ist redundant, da status bereits den aktuellen Status enthält
+            // if (currentStatus.getStatus() != isOnline) { 
+                if (config.getAsBoolean(ConfigDataKey.DISCORD_PROXY_STATUS_ENABLED)) {
+                    discordBot.sendMessageEmbed(this.getStatusEmbed(serverName, isOnline));
+                }
 
-            if (config.getAsBoolean(ConfigDataKey.CONSOLE_SERVER_STATUS))
+                if (config.getAsBoolean(ConfigDataKey.CONSOLE_SERVER_STATUS)) {
+                    logger.accept(this.getStatusString(serverName, isOnline));
+                }
+            //}
+        });
+    }
+}
+
+        ServerStatus currentStatus = this.getStatus(serverName);
+        currentStatus.updateStatus(newStatus).ifPresent(isOnline -> {
+            if (config.getAsBoolean(ConfigDataKey.DISCORD_PROXY_STATUS_ENABLED)) {
+                discordBot.sendMessageEmbed(this.getStatusEmbed(serverName, isOnline));
+            }
+
+            if (config.getAsBoolean(ConfigDataKey.CONSOLE_SERVER_STATUS)) {
                 logger.accept(this.getStatusString(serverName, isOnline));
+            }
         });
     }
 }
