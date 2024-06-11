@@ -42,19 +42,19 @@ public final class SimpleProxyChatBungee extends Plugin {
 
     @Override
     public void onEnable() {
-        this.getLogger().info("The plugin is starting.");
+        this.getLogger().info("Das Plugin wird gestartet.");
 
         this.config = new Config(this.getDataFolder());
         this.config.initialize();
 
         epochHelper = new EpochHelper(config);
 
-        this.getLogger().info("Attempting to initialize Discord bot... (if enabled)");
+        this.getLogger().info("Versuch, den Discord-Bot zu initialisieren... (falls aktiviert)");
         discordBot = new Bot(this.config);
 
         this.getProxy().getScheduler().runAsync(this, () -> {
             try { discordBot.start();
-            } catch (Exception e) { getLogger().warning("There was an error starting the discord bot: " + e.getMessage()); }
+            } catch (Exception e) { getLogger().warning("Es gab einen Fehler beim Starten des Discord-Bots: " + e.getMessage()); }
         });
 
         registerListeners();
@@ -77,13 +77,13 @@ public final class SimpleProxyChatBungee extends Plugin {
         startUpdateChecker();
 
         // bStats Stuff
-        this.getLogger().info("Starting bStats... (IF ENABLED)");
+        this.getLogger().info("Starting bStats... (WENN AKTIVIERT)");
         this.metrics = new Metrics(this, 21146);
 
         startPluginMessaging();
 
         // Plugin has started.
-        this.getLogger().log(Level.INFO, "The plugin has been started.");
+        this.getLogger().log(Level.INFO, "Das Plugin wurde gestartet.");
 
         // Send Initial Server Status
         discordBot.addRunnableToQueue(() -> {
@@ -100,65 +100,77 @@ public final class SimpleProxyChatBungee extends Plugin {
         });
     }
 
-    private void startUpdateChecker() {
-        String currentVersion = this.getDescription().getVersion();
+private void startUpdateChecker() {
+    String currentVersion = this.getDescription().getVersion();
 
-        UpdateChecker updateChecker = new UpdateChecker(
-                config,
-                currentVersion,
-                (message) -> {
-                    if (!config.getAsBoolean(ConfigDataKey.UPDATE_NOTIFICATIONS)) return;
+    UpdateChecker updateChecker = new UpdateChecker(
+        config,
+        currentVersion,
+        (message) -> {
+            if (!config.getAsBoolean(ConfigDataKey.UPDATE_NOTIFICATIONS)) {
+                return; // Benachrichtigungen sind deaktiviert, also nichts tun
+            }
 
-                    this.getLogger().info(Helper.sanitize(message));
+            this.getLogger().info(Helper.sanitize(message)); // Loggen der bereinigten Nachricht
 
-                    Component minimessage = MiniMessage.miniMessage().deserialize(config.getAsString(ConfigDataKey.PLUGIN_PREFIX) + message);
-                    this.getProxy().getPlayers()
-                            .stream()
-                            .filter((player) -> player.hasPermission(Permission.READ_UPDATE_NOTIFICATION.getPermissionNode()))
-                            .forEach((player) -> player.sendMessage(ChatMessageType.CHAT, BungeeComponentSerializer.get().serialize(minimessage)));
-                }
-        );
+            // Formatieren der Update-Nachricht
+            Component minimessage = MiniMessage.miniMessage().deserialize(
+                config.getAsString(ConfigDataKey.PLUGIN_PREFIX) + message
+            );
 
-        this.getProxy().getScheduler().schedule(this, updateChecker::checkUpdate, 0, 12, TimeUnit.HOURS);
-    }
+            // Senden der Nachricht nur an Spieler mit der entsprechenden Berechtigung
+            this.getProxy().getPlayers().stream()
+                .filter(player -> player.hasPermission(Permission.READ_UPDATE_NOTIFICATION.getPermissionNode()))
+                .forEach(player -> player.sendMessage(ChatMessageType.CHAT, BungeeComponentSerializer.get().serialize(minimessage)));
+        }
+    );
 
+    // Planen der Update-Prüfung mit Fehlerbehandlung
+    this.getProxy().getScheduler().schedule(this, () -> {
+        try {
+            updateChecker.checkUpdate(); // Update-Prüfung durchführen
+        } catch (Exception e) {
+            getLogger().warning("Fehler bei der Update-Prüfung: " + e.getMessage());
+        }
+    }, 0, 12, TimeUnit.HOURS); // Alle 12 Stunden wiederholen
+}
+
+
+    
     private void hookPlugins() {
         PluginManager pm = this.getProxy().getPluginManager();
 
-        // Enable vanish support.
         if (pm.getPlugin("PremiumVanish") != null || pm.getPlugin("SuperVanish") != null) {
             this.config.overwrite(ConfigDataKey.VANISH_ENABLED, true);
-            this.getLogger().log(Level.INFO, "PremiumVanish/SuperVanish support has been enabled.");
+            this.getLogger().log(Level.INFO, "PremiumVanish/SuperVanish-Unterstützung wurde aktiviert.");
             this.getProxy().getPluginManager().registerListener(this, new BungeeVanishListener(serverListener, config));
         }
 
-        // Registering LuckPerms support.
         if (pm.getPlugin("LuckPerms") != null) {
             config.overwrite(ConfigDataKey.LUCKPERMS_ENABLED, true);
-            getLogger().info("LuckPerms support has been enabled.");
+            getLogger().info("LuckPerms-Unterstützung wurde aktiviert.");
         }
 
-        // Registering LiteBans support.
         if (pm.getPlugin("LiteBans") != null) {
             config.overwrite(ConfigDataKey.LITEBANS_ENABLED, true);
-            getLogger().info("LiteBans support has been enabled.");
+            getLogger().info("LiteBans-Unterstützung wurde aktiviert.");
         }
 
-        // Registering AdvancedBan support.
         if (pm.getPlugin("AdvancedBan") != null) {
             config.overwrite(ConfigDataKey.ADVANCEDBAN_ENABLED, true);
-            getLogger().info("AdvancedBan support has been enabled.");
+            getLogger().info("AdvancedBan-Unterstützung wurde aktiviert.");
         }
 
-        // Registering NetworkManager support.
         if (pm.getPlugin("NetworkManager") != null) {
             config.overwrite(ConfigDataKey.NETWORKMANAGER_ENABLED, true);
-            getLogger().info("NetworkManager support has been enabled.");
+            getLogger().info("NetworkManager-Unterstützung wurde aktiviert.");
         }
 
-        // Registering the Simple Ban System
-        if (!config.getAsBoolean(ConfigDataKey.LITEBANS_ENABLED) && !config.getAsBoolean(ConfigDataKey.ADVANCEDBAN_ENABLED) && config.getAsBoolean(ConfigDataKey.USE_SIMPLE_PROXY_CHAT_BANNING_SYSTEM)) {
-            getLogger().info("LiteBans and AdvancedBan not found. Using the built-in banning system for SimpleProxyChat...");
+        if (!config.getAsBoolean(ConfigDataKey.LITEBANS_ENABLED) 
+            && !config.getAsBoolean(ConfigDataKey.ADVANCEDBAN_ENABLED) 
+            && config.getAsBoolean(ConfigDataKey.USE_SIMPLE_PROXY_CHAT_BANNING_SYSTEM)) {
+
+            getLogger().info("LiteBans und AdvancedBan nicht gefunden. Verwende das eingebaute Bannsystem für SimpleProxyChat...");
             banHelper = new BanHelper(this.getDataFolder());
             banHelper.initialize();
         } else {
@@ -166,49 +178,47 @@ public final class SimpleProxyChatBungee extends Plugin {
         }
     }
 
-    private void registerListeners() {
-        // Register Discord Listener
-        ChatHandler chatHandler = new ChatHandler(
-                config,
-                epochHelper,
-                discordBot,
-                (message) -> this.getProxy().broadcast(Helper.convertToBungee(message)),
-                (message) -> getLogger().info(Helper.sanitize(message))
-        );
+private void registerListeners() {
+    // Register Discord Listener
+    ChatHandler chatHandler = new ChatHandler(
+            config,
+            epochHelper,
+            discordBot,
+            (message) -> this.getProxy().broadcast(Helper.convertToBungee(message)),
+            (message) -> getLogger().info(Helper.sanitize(message))
+    );
 
-        serverListener = new BungeeServerListener(this, chatHandler);
-        this.getProxy().getPluginManager().registerListener(this, serverListener);
+    serverListener = new BungeeServerListener(this, chatHandler);
+    this.getProxy().getPluginManager().registerListener(this, serverListener);
 
-        whisperHandler = new WhisperHandler();
+    whisperHandler = new WhisperHandler();
+}
+
+private void registerCommands() {
+    this.getProxy().getPluginManager().registerCommand(this, new BungeeReloadCommand(this, config));
+    this.getProxy().getPluginManager().registerCommand(this, new BungeeChatToggleCommand(this, config));
+    this.getProxy().getPluginManager().registerCommand(this, new BungeeWhisperCommand(this, config, config.getAsArrayList(ConfigDataKey.WHISPER_ALIASES).toArray(new String[0])));
+    this.getProxy().getPluginManager().registerCommand(this, new BungeeReplyCommand(this, config, config.getAsArrayList(ConfigDataKey.REPLY_ALIASES).toArray(new String[0])));
+
+    // Only enable when needed.
+    if (config.getAsBoolean(ConfigDataKey.USE_SIMPLE_PROXY_CHAT_BANNING_SYSTEM)) {
+        this.getProxy().getPluginManager().registerCommand(this, new BungeeBanCommand(this));
+        this.getProxy().getPluginManager().registerCommand(this, new BungeeUnbanCommand(this));
     }
+}
 
-    private void registerCommands() {
-        this.getProxy().getPluginManager().registerCommand(this, new BungeeReloadCommand(this, config));
-        this.getProxy().getPluginManager().registerCommand(this, new BungeeChatToggleCommand(this, config));
-        this.getProxy().getPluginManager().registerCommand(this, new BungeeWhisperCommand(this, config, config.getAsArrayList(ConfigDataKey.WHISPER_ALIASES).toArray(new String[0])));
-        this.getProxy().getPluginManager().registerCommand(this, new BungeeReplyCommand(this, config, config.getAsArrayList(ConfigDataKey.REPLY_ALIASES).toArray(new String[0])));
+private void startPluginMessaging() {
+    this.getProxy().registerChannel("BungeeCord");
+    this.getProxy().getPluginManager().registerListener(this, new BungeeCordPluginMessagingListener(this, serverListener));
+}
 
-        // Only enable when needed.
-        if (config.getAsBoolean(ConfigDataKey.USE_SIMPLE_PROXY_CHAT_BANNING_SYSTEM)) {
-            this.getProxy().getPluginManager().registerCommand(this, new BungeeBanCommand(this));
-            this.getProxy().getPluginManager().registerCommand(this, new BungeeUnbanCommand(this));
-        }
-    }
+private void stopPluginMessaging() {
+    this.getProxy().unregisterChannel("BungeeCord");
+}
 
-    private void startPluginMessaging() {
-        this.getProxy().registerChannel("BungeeCord");
-        this.getProxy().getPluginManager().registerListener(this, new BungeeCordPluginMessagingListener(this, serverListener));
-    }
-
-    private void stopPluginMessaging() {
-        this.getProxy().unregisterChannel("BungeeCord");
-    }
-
-    @Override
-    public void onDisable() {
-        this.getLogger().info("The plugin is shutting down...");
-        stopPluginMessaging();
-        discordBot.stop();
-    }
-
+@Override
+public void onDisable() {
+    this.getLogger().info("Das Plugin wird heruntergefahren...");
+    stopPluginMessaging();
+    discordBot.stop();
 }
