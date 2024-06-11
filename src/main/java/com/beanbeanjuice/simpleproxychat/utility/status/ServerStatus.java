@@ -1,19 +1,24 @@
 package com.beanbeanjuice.simpleproxychat.utility.status;
 
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;
 
+@Slf4j // Using SLF4J for logging
 public class ServerStatus {
 
-    @Getter private Boolean status;  // Object wrapper to use Object#equals to detect state change.
-    private Boolean previousStatus;  // Object wrapper to use Object#equals to detect state change.
+    @Getter
+    private Boolean status;
+    private Boolean previousStatus;
+
     private int onlineCount = 0;
     private int offlineCount = 0;
 
     private static final int COUNT_UNTIL_UPDATE = 5;
 
     public ServerStatus() { }
+
     public ServerStatus(boolean initialStatus) {
         this.status = initialStatus;
         this.previousStatus = initialStatus;
@@ -25,16 +30,23 @@ public class ServerStatus {
     }
 
     public Optional<Boolean> updateStatus(Boolean newStatus) {
-        if (newStatus.equals(this.status)) return Optional.empty();  // Do nothing if no state change.
-        if (!newStatus.equals(this.previousStatus)) resetCount();  // This means a state change has occurred.
-        this.previousStatus = newStatus;
+        if (newStatus == status) { 
+            return Optional.empty(); // Keine Änderung, frühzeitig zurückgeben
+        }
 
-        int count = newStatus ? ++this.onlineCount : ++this.offlineCount;
-        if (count < COUNT_UNTIL_UPDATE) return Optional.empty();  // Do nothing if conditions are not met.
+        if (newStatus != previousStatus) { 
+            resetCount(); // Statuswechsel erkannt, Zähler zurücksetzen
+        }
+        previousStatus = newStatus;
 
-        resetCount();  // Conditions are met. Reset.
-        this.status = newStatus;
-        return Optional.of(this.status);
+        int count = newStatus ? ++onlineCount : ++offlineCount;
+        if (count < COUNT_UNTIL_UPDATE) {
+            return Optional.empty(); // Noch nicht genug Bestätigungen
+        }
+
+        resetCount(); 
+        status = newStatus;
+        log.info("Serverstatusänderung erkannt: {} -> {}", !newStatus, newStatus); // Statusänderung protokollieren
+        return Optional.of(status);
     }
-
 }
