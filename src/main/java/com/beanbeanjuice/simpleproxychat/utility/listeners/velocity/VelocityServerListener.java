@@ -32,9 +32,10 @@ public class VelocityServerListener {
     @Getter private final ChatHandler chatHandler;
     private VelocityVanishListener velocityVanishListener;
 
-    public VelocityServerListener(SimpleProxyChatVelocity plugin, ChatHandler chatHandler) {
+ public VelocityServerListener(SimpleProxyChatVelocity plugin, ChatHandler chatHandler) {
         this.plugin = plugin;
         this.chatHandler = chatHandler;
+        serverStatusManager = new ServerStatusManager(plugin.getConfig());
         startServerStatusDetection();
     }
 
@@ -43,7 +44,7 @@ public class VelocityServerListener {
         this.velocityVanishListener.startVanishListener();
     }
 
-    @Subscribe(order = PostOrder.LAST)
+ @Subscribe(order = PostOrder.LAST)
     public void onPlayerChat(PlayerChatEvent event) {
         String playerMessage = event.getMessage();
         Player player = event.getPlayer();
@@ -96,20 +97,21 @@ public class VelocityServerListener {
         chatHandler.runProxyJoinMessage(player.getUsername(), player.getUniqueId(), serverName, this::sendToAllServers);
     }
 
-    private void startServerStatusDetection() {
-        this.serverStatusManager = new ServerStatusManager(plugin.getConfig());
+   private void startServerStatusDetection() {
         int updateInterval = plugin.getConfig().getAsInteger(ConfigDataKey.SERVER_UPDATE_INTERVAL);
+        
+        plugin.getProxyServer().getScheduler().buildTask(plugin, () -> {
+            for (RegisteredServer server : plugin.getProxyServer().getAllServers()) { // Verwenden einer for-each-Schleife zur besseren Lesbarkeit
+                String serverName = server.getServerInfo().getName();
 
-        plugin.getProxyServer().getScheduler().buildTask(plugin, () -> plugin.getProxyServer().getAllServers().forEach((registeredServer) -> {
-            String serverName = registeredServer.getServerInfo().getName();
-
-            registeredServer.ping().thenAccept((ping) -> {  // Server is online.
-                this.serverStatusManager.runStatusLogic(serverName, true, plugin.getDiscordBot(), plugin.getLogger()::info);
-            }).exceptionally((exception) -> {  // Server is offline.
-                this.serverStatusManager.runStatusLogic(serverName, false, plugin.getDiscordBot(), plugin.getLogger()::info);
-                return null;
-            });
-        })).delay(updateInterval, TimeUnit.SECONDS).repeat(updateInterval, TimeUnit.SECONDS).schedule();
+                server.ping().thenAccept(ping -> 
+                    serverStatusManager.runStatusLogic(serverName, true, plugin.getDiscordBot(), plugin.getLogger()::info)
+                ).exceptionally(exception -> { 
+                    serverStatusManager.runStatusLogic(serverName, false, plugin.getDiscordBot(), plugin.getLogger()::info);
+                    return null;
+                });
+            }
+        }).repeat(updateInterval, TimeUnit.SECONDS).schedule(); // Erst nach dem ersten Intervall wiederholen
     }
 
     @Subscribe
