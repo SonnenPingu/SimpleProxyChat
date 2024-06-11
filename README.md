@@ -2,7 +2,7 @@
   <img src="https://github.com/beanbeanjuice/SimpleProxyChat/blob/master/Images/Finished/SimpleProxyChat.png?raw=true" alt="SimpleProxyChat Logo"/>
 </p>
 <center>
-  This is a Bungeecord Chat Sync, Velocity Chat Sync, and Proxy Chat Sync plugin. It is a simple plugin to allow <b>global</b> <i>cross-server</i> communication and messaging with support for <b>PlaceholderAPI</b>, <b>LuckPerms</b>, <b>LiteBans</b>, <b>AdvancedBan</b>, <b>NetworkManager</b>, and <b>Discord</b>.
+Dies ist ein Plugin für Bungeecord Chat Sync, Velocity Chat Sync und Proxy Chat Sync. Es ist ein einfaches Plugin, das eine <b>globale</b> <i>serverübergreifende</i> Kommunikation und Nachrichtenübermittlung mit Unterstützung für <b>PlaceholderAPI</b>, <b>LuckPerms</b>, <b>LiteBans</b>, <b>AdvancedBan</b>, <b>NetworkManager</b> und <b>Discord</b> ermöglicht.
 </center>
 
 ---
@@ -11,41 +11,42 @@
   <img src="https://github.com/beanbeanjuice/SimpleProxyChat/blob/master/Images/Finished/Installation.png?raw=true" alt="installation"/>
 </p>
 
-### With PlaceholderAPI
-1) You **must** use the *helper plugin* which you can download [here](https://www.spigotmc.org/resources/116966/).
-1) Drag the helper plugin to each **Spigot/Paper/Bukkit** server that you want PlaceholderAPI support on.
-    * You do not need any additional configuration on the Spigot/Paper/Bukkit server as long as you have PlaceholderAPI installed.
-1) Set `use-helper` to `true` in the `config.yml` for the proxy configuration. This will be in your **BungeeCord/Velocity** server.
-1) Restart or reload the plugin! `/spc-reload`
+### Mit PlaceholderAPI
+1) Sie **müssen** das *Hilfs-Plugin* verwenden, das Sie [hier](https://www.spigotmc.org/resources/116966/) herunterladen können.
+1) Ziehen Sie das Hilfs-Plugin auf jeden **Spigot/Paper/Bukkit**-Server, auf dem Sie PlaceholderAPI-Unterstützung wünschen.
+* Sie benötigen keine zusätzliche Konfiguration auf dem Spigot/Paper/Bukkit-Server, solange Sie PlaceholderAPI installiert haben.
+1) Setzen Sie `use-helper` in der `config.yml` für die Proxy-Konfiguration auf `true`. Dies wird auf Ihrem **BungeeCord/Velocity**-Server sein.
+1) Starten Sie das Plugin neu oder laden Sie es neu! `/spc-reload`
 
-> For **PlaceholderAPI** support, the helper plugin is required. Additionally, **PlaceholderAPI placeholders** can only be used for **Minecraft chat messages**. It will **not work** for join/leave messages.
+> Für **PlaceholderAPI**-Unterstützung ist das Hilfs-Plugin erforderlich. Außerdem können **PlaceholderAPI-Platzhalter** nur für **Minecraft-Chatnachrichten** verwendet werden. Es funktioniert **nicht** für Beitritts-/Verlassensnachrichten.
 
-### Without Discord
-1) Simply place the plugin in your `plugins` folder on **BungeeCord/Waterfall/Velocity** and restart your proxy!
+### Ohne Discord
+1) Platzieren Sie das Plugin einfach in Ihrem Ordner „Plugins“ auf **BungeeCord/Waterfall/Velocity** und starten Sie Ihren Proxy neu!
 
-### With Discord
-1) Go to discord.com/developers and select **New Application**. You can select *any* name you want.
-1) Go to the **OAuth2** section.
-1) Go to the **OAuth2 URL Generator** and give it the **bot** scope.
-1) Under **bot permissions** select;
-    - Manage Channels (**REQUIRED**: General Permissions)
-    - Send Messages (**REQUIRED**: Text Permissions)
-    - Manage Messages (**REQUIRED**: Text Permissions)
-    - Read Message History (**REQUIRED**: Text Permissions)
-    - *+ Any others that you want to add...*
-1) Copy the **Generated URL** at the bottom.
-1) Paste the generated URL into a web browser.
-1) Invite the bot to your server.
-1) Go back to discord.com/developers.
-1) Select your bot.
-1) Click on **bot**.
-1) Click **Reset Token** and copy the token somewhere safe.
-1) Scroll down to **Privileged Gateway Intents**.
-1) Select **SERVER MEMBER INTENT** and **MESSAGE CONTENT INTENT**.
-1) Place the plugin in the `plugins` folder on **BungeeCord/Velocity**.
-1) Start your server once *fully*, then stop it. There *will* be errors, this is normal.
-1) In the generated `ProxyChat/config.yml` file, paste your **Bot Token** and choose the appropriate channel you want messages being sent to.
-1) Restart your proxy!
+### Mit Discord
+1) Gehen Sie zu discord.com/developers und wählen Sie **Neue Anwendung**. Sie können *jeden* gewünschten Namen auswählen.
+1) Gehen Sie zum Abschnitt **OAuth2**.
+1) Gehen Sie zum **OAuth2-URL-Generator** und geben Sie ihm den **Bot**-Bereich.
+1) Wählen Sie unter **Bot-Berechtigungen**:
+
+- Kanäle verwalten (**ERFORDERLICH**: Allgemeine Berechtigungen)
+- Nachrichten senden (**ERFORDERLICH**: Textberechtigungen)
+- Nachrichten verwalten (**ERFORDERLICH**: Textberechtigungen)
+- Nachrichtenverlauf lesen (**ERFORDERLICH**: Textberechtigungen)
+- *+ Alle anderen, die Sie hinzufügen möchten...*
+1) Kopieren Sie die **Generierte URL** unten.
+1) Fügen Sie die generierte URL in einen Webbrowser ein.
+1) Laden Sie den Bot auf Ihren Server ein.
+1) Gehen Sie zurück zu discord.com/developers.
+1) Wählen Sie Ihren Bot aus.
+1) Klicken Sie auf **Bot**.
+1) Klicken Sie auf **Token zurücksetzen** und kopieren Sie das Token an einen sicheren Ort.
+1) Scrollen Sie nach unten zu **Privileged Gateway Intents**.
+1) Wählen Sie **SERVER MEMBER INTENT** und **MESSAGE CONTENT INTENT**.
+1) Platzieren Sie das Plugin im Ordner `plugins` auf **BungeeCord/Velocity**.
+1) Starten Sie Ihren Server einmal *vollständig* und stoppen Sie ihn dann. Es *wird* Fehler geben, das ist normal.
+1) Fügen Sie in die generierte Datei `ProxyChat/config.yml` Ihr **Bot-Token** ein und wählen Sie den entsprechenden Kanal aus, an den Nachrichten gesendet werden sollen.
+1) Starten Sie Ihren Proxy neu!
 
 ---
 
@@ -63,7 +64,7 @@
 * **Colored Chat**
 * **Cross-Server Communication**
 * **PlaceholderAPI Support**
-* **...and more!**
+* **... und mehr!**
 
 ---
 
@@ -74,131 +75,133 @@
 **config.yml**
 ```YAML
 # ==========================================================
-#                       INFORMATION
-#                 HEX Values are Supported
-#  Example: <#FFFFFF>Some text</#FFFFFF> this is a message!
-#         Supports Mini-Message/Legacy Color Codes
+#             INFORMATIONEN
+# HEX-Werte werden unterstützt
+# Beispiel: <#FFFFFF>Ein Text</#FFFFFF> dies ist eine Nachricht!
+# Unterstützt Mini-Nachrichten/Legacy-Farbcodes
 # ==========================================================
 
-# True if you will be using Discord. The reload command does not work with this.
+# True, wenn du Discord verwenden wirst. Der Befehl "reload" funktioniert damit nicht.
 use-discord: false
 
-# Discord Bot Token (IGNORE IF use_discord = false). The reload command does not work with this.
-BOT-TOKEN: "TOKEN_HERE"
+# Discord Bot Token (IGNORIEREN, WENN use_discord = falsch). Der Befehl "reload" funktioniert damit nicht.
+BOT-TOKEN: "TOKEN, hier rein!"
 
-# Channel to send Discord messages to (IGNORE IF use_discord = false). The reload command does not work with this.
+#Kanal, an den Discord-Nachrichten gesendet werden sollen (IGNORIEREN, WENN use_discord = falsch). Der Befehl "reload" funktioniert damit nicht.
 CHANNEL-ID: "GLOBAL_CHANNEL_ID"
 
 bot-activity:
-   # Valid Types: ONLINE, DO_NOT_DISTURB, IDLE, INVISIBLE
+   # Gültige Typen: ONLINE, DO_NOT_DISTURB, IDLE, INVISIBLE
    status: ONLINE
-   # Valid Types: PLAYING, STREAMING, LISTENING, WATCHING, COMPETING
+   # Gültige Typen: PLAYING, STREAMING, LISTENING, WATCHING, COMPETIN
    type: "COMPETING"
    text: "SimpleProxyChat by beanbeanjuice"
 
-# The amount of seconds to check if a server is online/offline.
-# Smaller numbers can cause errors. Beware.
+# Die Anzahl der Sekunden, um zu prüfen, ob ein Server online/offline ist.
+# Kleinere Zahlen können Fehler verursachen. Vorsicht.
 server-update-interval: 3
 
-# Use this if you want to change the default aliases.
-# It MUST be the same name you have in your bungee/velocity config.
-# Simply set it to disabled: disabled to disable it.
+#Verwende dies, wenn du die Standardaliase ändern möchtest.
+#Es MUSS derselbe Name sein, den du in deiner Bungee/Velocity-Konfiguration hast.
+#Setze es einfach auf disabled: disabled, um es zu deaktivieren.
 aliases:
    ServerInConfigExample: ServerAliasExample
    hub: Hub1
    smp: smp1
 
-# Whether to use the permission system.
-# Some permissions (denoted with ➕) are always active even if this is false.
-# simpleproxychat.read.chat - Read chat messages.
-# simpleproxychat.read.join - Read join messages.
-# simpleproxychat.read.leave - Read leave messages.
-# simpleproxychat.read.fake - Read the fake join/leave messages. Players must also have the REAL join/leave permission.
-# simpleproxychat.read.switch - Read switch messages.
-# simpleproxychat.read.update - Read update messages. ➕
-# simpleproxychat.toggle.chat - Toggle proxy chat for a single server. ➕
-# simpleproxychat.toggle.chat.all - Toggle proxy chat for all servers. ➕
-# simpleproxychat.reload - Reload the config. ➕
-# simpleproxychat.ban - Ban a player from the proxy. ➕
-# simpleproxychat.unban - Unban a player from the proxy. ➕
-# simpleproxychat.whisper - Whisper to another player on the proxy. ➕
+# Ob das Berechtigungssystem verwendet werden soll.
+# Einige Berechtigungen (markiert mit ➕) sind immer aktiv, auch wenn dies auf false gesetzt ist.
+# simpleproxychat.read.chat - Chat-Nachrichten lesen.
+# simpleproxychat.read.join - Beitrittsnachrichten lesen.
+# simpleproxychat.read.leave - Austrittsnachrichten lesen.
+# simpleproxychat.read.fake - Fake-Beitritts-/Austrittsnachrichten lesen. Spieler müssen auch die REAL-Berechtigung für Beitritt/Austritt haben.
+# simpleproxychat.read.switch - Wechselnachrichten lesen.
+# simpleproxychat.read.update - Update-Nachrichten lesen. ➕
+# simpleproxychat.toggle.chat - Proxy-Chat für einen einzelnen Server umschalten. ➕
+# simpleproxychat.toggle.chat.all - Proxy-Chat für alle Server umschalten. ➕
+# simpleproxychat.reload - Die Konfiguration neu laden. ➕
+# simpleproxychat.ban - Einen Spieler vom Proxy bannen. ➕
+# simpleproxychat.unban - Einen Spieler vom Proxy entbannen. ➕
+# simpleproxychat.whisper - Einem anderen Spieler auf dem Proxy flüstern. ➕
 use-permissions: false
 
-# Only messages that start with this character will be sent through the plugin.
-# Set to '' to disable.
-# Example: If it is set to '$', then when a player sends $hello, it will be sent through the proxy.
+
+# Nur Nachrichten, die mit diesem Zeichen beginnen, werden durch das Plugin gesendet.
+# Auf '' setzen, um es zu deaktivieren.
+# Beispiel: Wenn es auf '$' gesetzt ist, wird, wenn ein Spieler $hello sendet, dies durch den Proxy gesendet.
 proxy-message-prefix: ''
 
-# Whether to send if the statuses of the servers connected to the proxy when the proxy starts up.
-# THIS IS FOR DISCORD MESSAGES ONLY.
+# Ob die Status der an den Proxy angeschlossenen Server beim Start des Proxys gesendet werden sollen.
+# DIES IST NUR FÜR DISCORD-NACHRICHTEN.
 use-initial-server-status: true
 
-# Whether to send a fake join/leave message when vanishing/unvanishing.
+# Ob eine Fake-Beitritts-/Austrittsnachricht beim Verschwinden/Wiedererscheinen gesendet werden soll.
 use-fake-messages: true
 
 # Format: https://docs.oracle.com/javase/8/docs/api/java/time/format/DateTimeFormatter.html
-# Timezone: https://www.joda.org/joda-time/timezones.html
+# Zeitzone: https://www.joda.org/joda-time/timezones.html
 timestamp:
-   # If your server is prone to getting off-sync on the time you can use an API.
-   # WARNING: Using the API will make messages somewhat longer to send.
-   # Additionally, the maximum accuracy will only be up to 1 minute, rather than seconds.
+   # Wenn dein Server dazu neigt, zeitlich aus dem Takt zu geraten, kannst du eine API verwenden.
+   # WARNUNG: Die Verwendung der API wird dazu führen, dass Nachrichten etwas länger zum Senden brauchen.
+   # Außerdem wird die maximale Genauigkeit nur bis zu 1 Minute betragen, statt Sekunden.
    use-api: false
    format: "hh:mm a"
    timezone: "America/Los_Angeles"
 
-# True if you will be using the helper plugin.
+# True, wenn du das Helfer-Plugin verwenden wirst.
 use-helper: false
 
 update-notifications: true
 
-# It is HIGHLY recommended to use a more robust proxy-wide banning system such as LiteBans or AdvancedBan.
-# However, if you would rather a light-weight, simple, banning system. You can enable it here.
-# A FULL PROXY RESTART IS REQUIRED TO USE THIS.
+# Es wird DRINGEND empfohlen, ein robusteres Proxy-weites Banns-System wie LiteBans oder AdvancedBan zu verwenden.
+# Wenn du jedoch ein leichtgewichtiges, einfaches Bannsystem bevorzugst, kannst du es hier aktivieren.
+# EIN VOLLSTÄNDIGER PROXY-NEUSTART IST ERFORDERLICH, UM DIES ZU VERWENDEN.
 use-simple-proxy-chat-banning-system: false
 
-# These require a restart in order to take place.
+# Diese Änderungen erfordern einen Neustart, um wirksam zu werden.
 commands:
    whisper-aliases:
       - "spc-msg"
    reply-aliases:
       - "spc-r"
 
-# DO NOT TOUCH THIS
+# NICHT BERÜHREN
 file-version: 12
+
 ```
 
 **messages.yml**
 ```YAML
 # ==========================================================
-#                       INFORMATION
-#                 HEX Values are Supported
-#  Example: <#FFFFFF>Some text</#FFFFFF> this is a message!
-#         Supports Mini-Message/Legacy Color Codes
+#                       INFORMATIONEN
+#                 HEX-Werte werden unterstützt
+#  Beispiel: <#FFFFFF>Some text</#FFFFFF> dies ist eine Nachricht!
+#         Unterstützt Mini-Message/Legacy-Farbcodes
 # ==========================================================
 
-# Prefix for the plugin. %plugin-prefix% usable anywhere.
+# Präfix für das Plugin. %plugin-prefix% überall verwendbar.
 plugin-prefix: "&8[<bold><rainbow>SimpleProxyChat&r&8]"
 
-# Minecraft Stuff
+# Minecraft-Einstellungen
 minecraft:
    join:
       enabled: true
-      message: "&e%player% &ahas joined the network. (%server%)"
+      message: "&e%player% &ahas hat das Netzwerk betreten. (%server%)"
    leave:
       enabled: true
-      message: "&e%player% &chas left the network. (%server%)"
+      message: "&e%player% &chas hat das Netzwerk verlassen. (%server%)"
    chat:
       enabled: true
       message: "&8[&3%server%&8] &e%player% &9» &7%message%"
-      vanished: "&cYou cannot send proxy messages while vanished. Your message must end with a '&e/&c' to speak."
+      vanished: "&cDu kannst keine Proxy-Nachrichten senden, während du unsichtbar bist. Deine Nachricht muss mit einem '&e/&c' enden, um zu sprechen."
    switch:
       enabled: true
-      default: "&e%player% &7moved from &c%from% &7to &a%to%&7."
-      no-from: "&e%player% &7moved &7to &a%to%&7."
+      default: "&e%player% &7ist von &c%from% &7zu &a%to%&7 gewechselt."
+      no-from: "&e%player% &7ist zu &a%to%&7 gewechselt."
    whisper:
       send: "&8[&dyou&8] &f⇒ &8[&d%receiver%&8] &9» &e%message%"
       receive: "&8[&d%sender%&8] &f⇒ &8[&dyou&8] &9» &e%message%"
-      error: "&c/spc-whisper (user) (message)"
+      error: "&c/spc-whisper (Benutzer) (Nachricht)"
    discord:
       enabled: true
       message: "**%server%** %player% » %message%"
@@ -209,56 +212,56 @@ minecraft:
          color: "#FFC0CB"
          use-timestamp: true
    command:
-      no-permission: "%plugin-prefix% &cSorry, you do not have permission to run this command."
-      unknown: "%plugin-prefix% &cUnknown command."
-      must-be-player: "%plugin-prefix% &cYou must be a player to run this command."
-      reload: "%plugin-prefix% &aThe plugin has been successfully reloaded!"
+      no-permission: "%plugin-prefix% &cEntschuldigung, du hast keine Berechtigung, diesen Befehl auszuführen."
+      unknown: "%plugin-prefix% &cUnbekannter Befehl."
+      must-be-player: "%plugin-prefix% &cDu musst ein Spieler sein, um diesen Befehl auszuführen."
+      reload: "%plugin-prefix% &aDas Plugin wurde erfolgreich neu geladen!"
       chat-lock:
-         usage: "%plugin-prefix% &cCorrect usage is &a/spc-chat all lock/unlock &c or &a/spc-chat lock/unlock"
+         usage: "%plugin-prefix% &cDie korrekte Verwendung ist &a/spc-chat all lock/unlock &c oder &a/spc-chat lock/unlock"
          single:
-            locked: "%plugin-prefix% &6%server% &cwill no longer send proxy chat messages."
-            unlocked: "%plugin-prefix% &6%server% &awill now send proxy chat messages."
+            locked: "%plugin-prefix% &6%server% &cwird keine Proxy-Chat-Nachrichten mehr senden."
+            unlocked: "%plugin-prefix% &6%server% &awird jetzt Proxy-Chat-Nachrichten senden."
          all:
-            locked: "%plugin-prefix% &cAll servers will no longer send proxy chat messages."
-            unlocked: "%plugin-prefix% &aAll servers will now send proxy chat messages."
+            locked: "%plugin-prefix% &cAlle Server werden keine Proxy-Chat-Nachrichten mehr senden."
+            unlocked: "%plugin-prefix% &aAlle Server werden jetzt Proxy-Chat-Nachrichten senden."
       proxy-ban:
-         usage: "%plugin-prefix% &c/(un)ban (player)"
-         banned: "%plugin-prefix% &c%player% &7has been banned."
-         unbanned: "%plugin-prefix% &c%player% &7has been unbanned."
-         login-message: "&cYou have been banned from the proxy."
+         usage: "%plugin-prefix% &c/(un)ban (Spieler)"
+         banned: "%plugin-prefix% &c%player% &7wurde gebannt."
+         unbanned: "%plugin-prefix% &c%player% &7wurde entbannt."
+         login-message: "&cDu wurdest vom Proxy gebannt."
 
-# Discord Stuff
+# Discord-Einstellungen
 discord:
    join:
       enabled: true
-      message: "%player% has joined the network. (%server%)"
+      message: "%player% hat das Netzwerk betreten. (%server%)"
       use-timestamp: true
    leave:
       enabled: true
-      message: "%player% has left the network. (%server%)"
+      message: "%player% hat das Netzwerk verlassen. (%server%)"
       use-timestamp: true
    switch:
       enabled: true
-      message: "%player% has switched from %from% to %to%."
+      message: "%player% ist von %from% zu %to% gewechselt."
       use-timestamp: true
    chat:
       enabled: true
       minecraft-message: "&8[&bDiscord&8] %role% &f%user% &9» &7%message%"
    topic:
-      online: "There are %online% players online."
-      offline: "The proxy is offline."
+      online: "Es sind %online% Spieler online."
+      offline: "Der Proxy ist offline."
    proxy-status:
       enabled: true
       messages:
-         enabled: "✅ Proxy enabled!"
-         disabled: "⛔ Proxy disabled."
-         title: "Server Status"
+         enabled: "✅ Proxy aktiviert!"
+         disabled: "⛔ Proxy deaktiviert."
+         title: "Serverstatus"
          message: "Status: "
          online: "Online ✅"
          offline: "Offline ⛔"
          use-timestamp: true
 
-# Console Stuff - Uses Minecraft Messages
+# Konsoleneinstellungen - Verwendet Minecraft-Nachrichten
 console:
    chat: true
    join: true
@@ -267,24 +270,24 @@ console:
    discord-chat: true
    server-status: true
 
-# The message for any updates that are sent.
-# The plugin-prefix is automatically appended to the beginning of this message.
-update-message: "&7There is an update! You are on &c%old%. New version is &a%new%&7: &6%link%"
+# Die Nachricht für alle Updates, die gesendet werden.
+# Das plugin-prefix wird automatisch an den Anfang dieser Nachricht angehängt.
+update-message: "&7Es gibt ein Update! Du bist auf &c%old%. Neue Version ist &a%new%&7: &6%link%"
 
-# DO NOT TOUCH THIS
+# NICHT BERÜHREN
 file-version: 8
 ```
-
 ---
 
 <p align="center">
   <img src="https://github.com/beanbeanjuice/SimpleProxyChat/blob/master/Images/Finished/Commands.png?raw=true" alt="commands"/>
 </p>
 
-* `/spc-reload` - Reloads the config files.
-* `/spc-chat` - Lock/unlock the chat.
-* `/spc-whipser` - Send a private message to someone.
-* `/spc-reply` - Reply to a private message without specifying a user.
+* `/spc-reload` - Lädt die Konfigurationsdateien neu.
+* `/spc-chat` - Sperrt/entsperrt den Chat.
+* `/spc-whisper` - Sendet eine private Nachricht an jemanden.
+* `/spc-reply` - Antwortet auf eine private Nachricht, ohne einen Benutzer anzugeben.
+
 
 ---
 
@@ -292,18 +295,20 @@ file-version: 8
   <img src="https://github.com/beanbeanjuice/SimpleProxyChat/blob/master/Images/Finished/Permissions.png?raw=true" alt="permissions"/>
 </p>
 
-* `simpleproxychat.read.chat` - Read chat messages.
-* `simpleproxychat.read.join` - Read join messages.
-* `simpleproxychat.read.leave` - Read leave messages.
-* `simpleproxychat.read.fake` - Read fake join/leave messages. Must have the real permission too.
-* `simpleproxychat.read.switch` - Read switch messages.
-* `simpleproxychat.read.update` - Read update notifications.
-* `simpleproxychat.toggle.chat` - Toggle proxy chat for a single server.
-* `simpleproxychat.toggle.chat.all` - Toggle proxy chat for all servers.
-* `simpleproxychat.reload` - Reload the config.
-* `simpleproxychat.ban` - Ban someone.
-* `simpleproxychat.unban` - Unban someone.
-* `simpleproxychat.whisper` - Private messaging permissions.
+```yaml
+* `simpleproxychat.read.chat` - Lese Chatnachrichten.
+* `simpleproxychat.read.join` - Lese Beitrittsnachrichten.
+* `simpleproxychat.read.leave` - Lese Austrittsnachrichten.
+* `simpleproxychat.read.fake` - Lese gefälschte Beitritts-/Austrittsnachrichten. Muss auch die reale Berechtigung haben.
+* `simpleproxychat.read.switch` - Lese Wechselnachrichten.
+* `simpleproxychat.read.update` - Lese Update-Benachrichtigungen.
+* `simpleproxychat.toggle.chat` - Schalte den Proxy-Chat für einen einzelnen Server um.
+* `simpleproxychat.toggle.chat.all` - Schalte den Proxy-Chat für alle Server um.
+* `simpleproxychat.reload` - Lade die Konfiguration neu.
+* `simpleproxychat.ban` - Jemanden bannen.
+* `simpleproxychat.unban` - Jemanden entbannen.
+* `simpleproxychat.whisper` - Berechtigungen für private Nachrichten.
+```
 
 ---
 
@@ -311,24 +316,24 @@ file-version: 8
   <img src="https://github.com/beanbeanjuice/SimpleProxyChat/blob/master/Images/Finished/Placeholders.png?raw=true" alt="placeholders"/>
 </p>
 
-* `%plugin-prefix%` - The plugin's designated prefix.
-* `%server%` - The current connected server. Uses the alias if one is specified.
-* `%original_server%` - Same as `%server%`, but does not use the alias.
-* `%to%` - The current connected server. Uses the alias if one is specified.
-* `%original_to%` - Same as `%to%`, but does not use the alias.
-* `%from%` - The server the player just disconnected from. Uses the alias if one is specified.
-* `%original_from%` - Same as `%from%`, but does not use the alias.
-* `%player%` - The player's Minecraft username.
-* `%sender%` - (PRIVATE MESSAGING ONLY) The person sending the private message.
-* `%receiver%` - (PRIVATE MESSAGING ONLY) The person receiving the private message.
-* `%user%` - The player's Discord username.
-* `%nick%` - The player's Discord nickname.
-* `%role%` - The player's Discord role.
-* `%prefix%` - The player's prefix. **LuckPerms Only**
-* `%suffix%` - The player's suffix. **LuckPerms Only**
-* `%message%` - The player's message.
-* `%epoch%` - This get's the current time (in milliseconds). Formats can be used like [this](https://gist.github.com/LeviSnoot/d9147767abeef2f770e9ddcd91eb85aa). An example would be `<t:%epoch%>`. **Discord Only**
-* `%time%` - Similar to `%epoch%`, but uses a special formatting and timezone found in `config.yml`. **Discord and Minecraft**
+* `%plugin-prefix%` - Das festgelegte Präfix des Plugins.
+* `%server%` - Der aktuell verbundene Server. Verwendet den Alias, falls einer angegeben ist.
+* `%original_server%` - Dasselbe wie `%server%`, aber ohne den Alias.
+* `%to%` - Der aktuell verbundene Server. Verwendet den Alias, falls einer angegeben ist.
+* `%original_to%` - Dasselbe wie `%to%`, aber ohne den Alias.
+* `%from%` - Der Server, von dem der Spieler gerade getrennt wurde. Verwendet den Alias, falls einer angegeben ist.
+* `%original_from%` - Dasselbe wie `%from%`, aber ohne den Alias.
+* `%player%` - Der Minecraft-Benutzername des Spielers.
+* `%sender%` - (NUR FÜR PRIVATE NACHRICHTEN) Die Person, die die private Nachricht sendet.
+* `%receiver%` - (NUR FÜR PRIVATE NACHRICHTEN) Die Person, die die private Nachricht erhält.
+* `%user%` - Der Discord-Benutzername des Spielers.
+* `%nick%` - Der Discord-Spitzname des Spielers.
+* `%role%` - Die Discord-Rolle des Spielers.
+* `%prefix%` - Das Präfix des Spielers. **Nur LuckPerms**
+* `%suffix%` - Das Suffix des Spielers. **Nur LuckPerms**
+* `%message%` - Die Nachricht des Spielers.
+* `%epoch%` - Ruft die aktuelle Zeit (in Millisekunden) ab. Formate können [so](https://gist.github.com/LeviSnoot/d9147767abeef2f770e9ddcd91eb85aa) verwendet werden. Ein Beispiel wäre `<t:%epoch%>`. **Nur Discord**
+* `%time%` - Ähnlich wie `%epoch%`, aber verwendet ein spezielles Format und eine Zeitzone, die in `config.yml` gefunden werden. **Discord und Minecraft**
 
 ---
 
@@ -336,9 +341,10 @@ file-version: 8
   <img src="https://github.com/beanbeanjuice/SimpleProxyChat/blob/master/Images/Finished/Caveats.png?raw=true" alt="caveats"/>
 </p>
 
-1) As of right now, vanish support is only available on *BungeeCord/Waterfall*. The plugin will still function as normal, but if you go into vanish then it won't send a fake join/leave message.
-1) In order for prefixes and suffixes to work, you **must** have LuckPerms installed on the proxy. Then, you can use `%prefix%` and `%suffix%`.
-1) `%epoch%` and the timestamps only work in certain places on Discord. As an alternative, you can select some of the embeds to have `use-timestamp: true`. This is out of my control sadly... 😔
+1) Derzeit ist die Unterstützung für das Verschwinden nur auf *BungeeCord/Waterfall* verfügbar. Das Plugin wird weiterhin normal funktionieren, aber wenn du in den Unsichtbarkeitsmodus gehst, wird keine gefälschte Beitritts-/Austrittsnachricht gesendet.
+2) Damit Präfixe und Suffixe funktionieren, **muss** LuckPerms auf dem Proxy installiert sein. Dann kannst du `%prefix%` und `%suffix%` verwenden.
+3) `%epoch%` und die Zeitstempel funktionieren nur an bestimmten Stellen auf Discord. Alternativ kannst du einige der Einbettungen auswählen, um `use-timestamp: true` zu haben. Dies liegt leider außerhalb meiner Kontrolle... 😔
+
 
 ---
 
